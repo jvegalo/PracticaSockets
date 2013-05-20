@@ -5,6 +5,7 @@
 package connection;
 
 import java.io.DataOutputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -35,5 +36,10 @@ public class Connection {
         os.writeUTF(a);
     }
     
-    
+    public String getMessage() throws IOException{    
+        DataInputStream dataInput;
+        dataInput = new DataInputStream(serverSocket.getInputStream());
+        String message = dataInput.readUTF();
+        return message;
+    }
 }

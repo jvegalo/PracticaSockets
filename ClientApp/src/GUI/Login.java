@@ -107,17 +107,22 @@ public class Login extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         try {
             Connection co = Connection.getInstanceConnection();
-            co.sendMessage("hola");
+            //Verfify that use exists
+            String userData = "confirmUser&"+txtUsername.getText()+"&"+jPasswordField1.getPassword();
+            co.sendMessage(userData);
+            String confirmation = co.getMessage();
+            if (confirmation.equals("userAccepted")){
+                MainWindow mw = new MainWindow();
+                this.setVisible(false);
+                mw.setVisible(true);
+            }
         } catch (UnknownHostException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        //if the user exists
-        MainWindow mw = new MainWindow();
-        mw.setVisible(true);
-        this.setVisible(false);
+        
        
         
     }//GEN-LAST:event_btnLoginActionPerformed
