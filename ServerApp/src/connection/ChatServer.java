@@ -9,6 +9,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Connection
@@ -21,6 +23,7 @@ import java.net.Socket;
 public class ChatServer {
 
     private static int PORT = 5000;
+    public static List userList = new ArrayList();
     
     public ChatServer() throws IOException{        
         ServerSocket socketServidor = new ServerSocket(PORT);

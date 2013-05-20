@@ -115,6 +115,9 @@ public class Login extends javax.swing.JFrame {
                 MainWindow mw = new MainWindow();
                 this.setVisible(false);
                 mw.setVisible(true);
+                System.out.println(confirmation);
+            } else {
+                System.out.println("Error");
             }
         } catch (UnknownHostException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);

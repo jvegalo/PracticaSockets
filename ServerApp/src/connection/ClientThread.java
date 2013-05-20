@@ -8,6 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import serverapp.User;
 
 /**
  *
@@ -16,7 +17,7 @@ import java.net.Socket;
 public class ClientThread implements Runnable{
     private DataInputStream dataInput;
     private DataOutputStream dataOutput;
-    
+    private String response;
     
     //agregar la lista como parametro
     public ClientThread(Socket socket) {
@@ -58,6 +59,25 @@ public class ClientThread implements Runnable{
         //Hacer efectivo el protocolo.
         System.out.println("*********Hilo nuevo*******");
         System.out.println("Soy tu nuevo cliente");
+        try{
+            String text = dataInput.readUTF();
+            String[] splitText = text.split("&");
+            String command = splitText[0];
+            if (command.equals("confirmUser")){
+                String username = splitText[1];
+                String password = splitText[2];
+                User user = new User(username, password);
+                ChatServer.userList.add(user);
+                response = "userAccepted";
+                
+            }
+            
+            sendMessage(response);
+            
+        } catch (Exception e) {
+             e.getMessage();
+        }
+        
     }
 
 }
