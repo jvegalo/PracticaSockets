@@ -4,12 +4,6 @@
  */
 package GUI;
 
-import connection.Connection;
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author jose
@@ -105,20 +99,10 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        try {
-            Connection co = Connection.getInstanceConnection();
-            co.sendMessage("hola");
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        //if the user exists
         MainWindow mw = new MainWindow();
-        mw.setVisible(true);
-        this.setVisible(false);
-       
+        mw.show();
+        this.hide();
+        
         
     }//GEN-LAST:event_btnLoginActionPerformed
 
