@@ -18,6 +18,7 @@ public class ServerApp {
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
         ChatServer con = new ChatServer();
+        
         //con.sendMessage("Primer mensaje");
         //con.sendMessage("Segundo mensaje");
         //System.out.println(con.getMessage());

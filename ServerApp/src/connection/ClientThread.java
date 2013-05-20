@@ -56,6 +56,8 @@ public class ClientThread implements Runnable{
     @Override
     public void run() {
         //Hacer efectivo el protocolo.
+        System.out.println("*********Hilo nuevo*******");
+        System.out.println("Soy tu nuevo cliente");
     }
 
 }
