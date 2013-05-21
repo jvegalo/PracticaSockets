@@ -4,17 +4,58 @@
  */
 package GUI;
 
+import connection.Connection;
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 /**
  *
  * @author jose
  */
 public class MainWindow extends javax.swing.JFrame {
+    private Connection co;
+    private Vector chatRoomsList = new Vector();
+    private ListSelectionListener lSL = new ListSelectionListener()
+    {
+        @Override
+        public void valueChanged(ListSelectionEvent evt)
+        {
+            if(evt.getValueIsAdjusting())
+            {
+                System.out.println("Eventhandler called evt.getValueIsAdjusting() true");
+                return;
+            }
+            else
+            {
+//              String item = (String) evt.getSource();//!!!Exception casting JList to String
+                //maybe what you need is getSelectedValue()
+                System.out.println("else called jList1.getSelectedValue() ="+jList1.getSelectedValue());
+            }
+        }
+    }; 
 
-    /**
-     * Creates new form MainWindow
-     */
-    public MainWindow() {
+   
+    public MainWindow() throws UnknownHostException, IOException {
         initComponents();
+        co = Connection.getInstanceConnection();
+        String chatRooms = co.getChatroomList();
+        if (chatRooms!=null){
+            String[] chatRoomsArray = chatRooms.split("&");
+            int arraySize = chatRoomsArray.length;
+            for (int i =1;i<arraySize;i++){
+                this.chatRoomsList.add(chatRoomsArray[i]);
+            }
+        }else{
+            this.chatRoomsList.add("There are no chatrooms yet");
+        }
+        jList1.setListData(chatRoomsList);
+        jList1.addListSelectionListener(lSL);
     }
 
     /**
@@ -28,6 +69,8 @@ public class MainWindow extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
 
@@ -35,13 +78,22 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel1.setText("Available Chatrooms");
 
+        jList1.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -49,7 +101,9 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(94, Short.MAX_VALUE))
         );
 
         jButton1.setText("Create Chatroom");
@@ -66,7 +120,7 @@ public class MainWindow extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(69, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(22, 22, 22))
         );
@@ -119,14 +173,22 @@ public class MainWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainWindow().setVisible(true);
+                try {
+                    new MainWindow().setVisible(true);
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

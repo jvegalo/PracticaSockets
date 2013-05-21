@@ -42,4 +42,10 @@ public class Connection {
         String message = dataInput.readUTF();
         return message;
     }
+    
+    public String getChatroomList () throws IOException{
+        this.sendMessage("getChatRoomsList&");
+        String chatRooms = this.getMessage();
+        return chatRooms;
+    }
 }
