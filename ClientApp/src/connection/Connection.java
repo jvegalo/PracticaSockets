@@ -36,11 +36,13 @@ public class Connection {
         os.writeUTF(a);
     }
     
-    public String getMessage() throws IOException{    
-        DataInputStream dataInput;
-        dataInput = new DataInputStream(serverSocket.getInputStream());
-        String message = dataInput.readUTF();
-        return message;
+    public String getMessage() throws IOException{
+
+            DataInputStream dataInput;
+            dataInput = new DataInputStream(serverSocket.getInputStream());
+            String message = dataInput.readUTF();
+            return message;
+        
     }
     
     public String getChatroomList () throws IOException{

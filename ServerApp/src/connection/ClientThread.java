@@ -8,6 +8,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import serverapp.ChatRoom;
 import serverapp.User;
 
 /**
@@ -59,20 +62,36 @@ public class ClientThread implements Runnable{
         //Hacer efectivo el protocolo.
         System.out.println("*********Hilo nuevo*******");
         System.out.println("Soy tu nuevo cliente");
+        
         try{
-            String text = dataInput.readUTF();
-            String[] splitText = text.split("&");
-            String command = splitText[0];
-            if (command.equals("confirmUser")){
-                String username = splitText[1];
-                String password = splitText[2];
-                User user = new User(username, password);
-                ChatServer.userList.add(user);
-                response = "userAccepted";
-                
+            while(true){
+                String text = dataInput.readUTF();
+                String[] splitText = text.split("&");
+                String command = splitText[0];
+                if (command.equals("confirmUser")){
+                    String username = splitText[1];
+                    String password = splitText[2];
+                    User user = new User(username, password);
+                    ChatServer.userList.add(user);
+                    response = "userAccepted";
+
+                } else if (command.equals("getChatRoomsList")){
+                    response = "chatRoomsList";
+                    for (int i = 0; i < ChatServer.chatRoomsList.size(); i++){
+                        ChatRoom chatRoom = (ChatRoom) ChatServer.chatRoomsList.get(i);
+                        response += "&"+ chatRoom.getName();
+                    }
+                } else if (command.equals("addChatRoom")){
+                    String chatRoomName = splitText[1];
+                    ChatRoom chatRoom = new ChatRoom(chatRoomName);
+                    ChatServer.chatRoomsList.add(chatRoom);
+                } else if (command.equals("pushMessage")){
+
+                }
+
+                sendMessage(response);
             }
             
-            sendMessage(response);
             
         } catch (Exception e) {
              e.getMessage();
