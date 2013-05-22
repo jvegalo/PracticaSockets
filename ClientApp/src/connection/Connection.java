@@ -50,4 +50,10 @@ public class Connection {
         String chatRooms = this.getMessage();
         return chatRooms;
     }
+    
+    public String requestChatRoom (String User_name, String ChatRoomDesired) throws IOException{
+        this.sendMessage("addUserToChatRoom&"+User_name+"&"+ChatRoomDesired);
+        String answer = this.getMessage();
+        return answer;
+    }
 }

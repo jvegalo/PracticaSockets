@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import clientapp.User;
 import connection.Connection;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -107,12 +108,21 @@ public class Login extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         try {
             Connection co = Connection.getInstanceConnection();
-            //Verfify that use exists
-            String userData = "confirmUser&"+txtUsername.getText()+"&"+jPasswordField1.getPassword();
+            //extract password
+            char[] a = jPasswordField1.getPassword();
+            int charArrayLength = jPasswordField1.getPassword().length;
+            String password = "";
+            for(int i=0;i<charArrayLength;i++){
+                password += a[i];
+            }
+            String userData = "confirmUser&"+txtUsername.getText()+"&"+password;
+            //Verfify that user exists
             co.sendMessage(userData);
             String confirmation = co.getMessage();
             if (confirmation.equals("userAccepted")){
-                MainWindow mw = new MainWindow();
+                //instance current logged user
+                User currentUser = new User (txtUsername.getText(),password);
+                MainWindow mw = new MainWindow(currentUser);
                 this.setVisible(false);
                 mw.setVisible(true);
                 System.out.println(confirmation);

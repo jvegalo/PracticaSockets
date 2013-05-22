@@ -4,6 +4,9 @@
  */
 package GUI;
 
+import clientapp.ChatRoom;
+import clientapp.ChatRoomControl;
+import clientapp.User;
 import connection.Connection;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -21,6 +24,7 @@ import javax.swing.event.ListSelectionListener;
 public class MainWindow extends javax.swing.JFrame {
     private Connection co;
     private Vector chatRoomsList = new Vector();
+    private static User currentUser;
     private ListSelectionListener lSL = new ListSelectionListener()
     {
         @Override
@@ -28,22 +32,36 @@ public class MainWindow extends javax.swing.JFrame {
         {
             if(evt.getValueIsAdjusting())
             {
-                System.out.println("Eventhandler called evt.getValueIsAdjusting() true");
+                String ChatRoomDesired = jList1.getSelectedValue().toString();
+                try {
+                    String[] answer = co.requestChatRoom(currentUser.getUser_name(), ChatRoomDesired).split("&");
+                    if (answer[1].equals("userAddedToChatRoom")){
+                        // if the server accepts, we open the new chatRoom
+                        ChatRoom curretChatRoom = new ChatRoom(ChatRoomDesired);
+                        ChatRoomControl chc = new ChatRoomControl(curretChatRoom);
+                        ChatRoomGui chg = new ChatRoomGui(chc);
+                        chg.setVisible(true);
+                    }
+                    
+                    
+                    } catch (IOException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 return;
             }
             else
             {
-//              String item = (String) evt.getSource();//!!!Exception casting JList to String
-                //maybe what you need is getSelectedValue()
-                System.out.println("else called jList1.getSelectedValue() ="+jList1.getSelectedValue());
+//             
             }
         }
     }; 
 
    
-    public MainWindow() throws UnknownHostException, IOException {
+    public MainWindow(User currentUser) throws UnknownHostException, IOException {
         initComponents();
+        this.currentUser = currentUser;
         co = Connection.getInstanceConnection();
+        //get available chat rooms at the moment
         String chatRooms = co.getChatroomList();
         if (chatRooms!=null){
             String[] chatRoomsArray = chatRooms.split("&");
@@ -56,6 +74,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
         jList1.setListData(chatRoomsList);
         jList1.addListSelectionListener(lSL);
+        
     }
 
     /**
@@ -174,7 +193,7 @@ public class MainWindow extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new MainWindow().setVisible(true);
+                    new MainWindow(currentUser).setVisible(true);
                 } catch (UnknownHostException ex) {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {

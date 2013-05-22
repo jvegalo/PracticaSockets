@@ -4,7 +4,6 @@
  */
 package clientapp;
 
-import connection.Connection;
 
 /**
  *
@@ -16,6 +15,28 @@ public class User {
     private String user_name;
     private String password;
     private ChatRoom chat_room;
-    private Connection connection;
-    private Message message;
+    
+    
+    public User(String username, String password) {
+        this.user_name = username;
+        this.password = password;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    
 }

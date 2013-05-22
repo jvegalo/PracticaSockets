@@ -8,9 +8,10 @@ package clientapp;
  *
  * @author jose
  */
-public class Message {
-    private int length;
-    private String text;
-    private User user;
+public class ChatRoomControl {
+    private ChatRoom ch;
     
+    public ChatRoomControl(ChatRoom ch){
+        this.ch = ch;
+    }
 }
