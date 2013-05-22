@@ -77,16 +77,62 @@ public class ClientThread implements Runnable{
 
                 } else if (command.equals("getChatRoomsList")){
                     response = "chatRoomsList";
-                    for (int i = 0; i < ChatServer.chatRoomsList.size(); i++){
-                        ChatRoom chatRoom = (ChatRoom) ChatServer.chatRoomsList.get(i);
-                        response += "&"+ chatRoom.getName();
+                    for (int i = 0; i < ChatServer.chatRoomsList.size(); i++){                        
+                        response += "&"+ ChatServer.chatRoomsList.get(i).getName();
                     }
                 } else if (command.equals("addChatRoom")){
                     String chatRoomName = splitText[1];
                     ChatRoom chatRoom = new ChatRoom(chatRoomName);
                     ChatServer.chatRoomsList.add(chatRoom);
+                    response = "ChatRoom added&" + chatRoom.getName();
                 } else if (command.equals("pushMessage")){
 
+                } else if (command.equals("addUserToChatRoom")){
+                    String userName = splitText[1];
+                    String chatRoomName = splitText[2];
+                    for (int i = 0; i < ChatServer.userList.size(); i++){
+                        if (userName.equals(ChatServer.userList.get(i).getUsername())){
+                            User newUser = ChatServer.userList.get(i);
+                            for (int j = 0; j < ChatServer.chatRoomsList.size(); j++){
+                                if (chatRoomName.equals(ChatServer.chatRoomsList.get(j).getName())){
+                                    ChatServer.chatRoomsList.get(j).addUser(newUser);
+                                    response = "userAddedToChatRoom&" + newUser.getUsername();
+                                    break;
+                                } 
+                            }
+                            break;
+                        } 
+                    }
+                } else if (command.equals("removeUserFromChatRoom")){
+                    String userName = splitText[1];
+                    String chatRoomName = splitText[2];
+                    for (int i = 0; i < ChatServer.userList.size(); i++){
+                        if (userName.equals(ChatServer.userList.get(i).getUsername())){
+                            User userToRemove = ChatServer.userList.get(i);
+                            for (int j = 0; j < ChatServer.chatRoomsList.size(); j++){
+                                if (chatRoomName.equals(ChatServer.chatRoomsList.get(j).getName())){
+                                    ChatServer.chatRoomsList.remove(userToRemove);
+                                    response = "userRemovedFromChatRoom&" + userToRemove.getUsername();
+                                    break;
+                                } 
+                            }
+                            break;
+                        } 
+                    }
+                    
+                } else if (command.equals("getUsersFromChatRoom")){
+                    String chatRoomName = splitText[1];
+                    ChatRoom chatRoom;
+                    for (int i = 0; i < ChatServer.chatRoomsList.size(); i++){
+                        if (chatRoomName.equals(ChatServer.chatRoomsList.get(i).getName())){
+                            chatRoom = ChatServer.chatRoomsList.get(i);
+                            response = "usersFromChatRoom";
+                            for (int j = 0; j < chatRoom.getUsers().size(); j++){
+                                response += "&" + chatRoom.getUsers().get(j).getUsername();
+                            }
+                            break;
+                        }
+                    }
                 }
 
                 sendMessage(response);

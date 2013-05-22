@@ -13,8 +13,8 @@ import java.util.List;
  */
 public class ChatRoom {
     private String name;
-    private User [] users;
-    private List messages = new ArrayList();
+    private ArrayList<User> users = new ArrayList<User>();
+    private ArrayList<User> messages = new ArrayList<User>();
 
     public ChatRoom(String name) {
         this.name = name;
@@ -29,13 +29,16 @@ public class ChatRoom {
         this.name = name;
     }
 
-    public User[] getUsers() {
+    public ArrayList<User> getUsers() {
         return users;
     }
 
-    public void setUsers(User[] users) {
+    public void setUsers(ArrayList<User> users) {
         this.users = users;
     }
     
+    public void addUser(User u){
+        this.users.add(u);
+    }
     
 }

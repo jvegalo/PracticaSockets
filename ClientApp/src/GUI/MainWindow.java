@@ -33,9 +33,10 @@ public class MainWindow extends javax.swing.JFrame {
             if(evt.getValueIsAdjusting())
             {
                 String ChatRoomDesired = jList1.getSelectedValue().toString();
+                System.out.println(jList1.getSelectedValue().toString());
                 try {
                     String[] answer = co.requestChatRoom(currentUser.getUser_name(), ChatRoomDesired).split("&");
-                    if (answer[1].equals("userAddedToChatRoom")){
+                    if (answer[0].equals("userAddedToChatRoom")){
                         // if the server accepts, we open the new chatRoom
                         ChatRoom curretChatRoom = new ChatRoom(ChatRoomDesired);
                         ChatRoomControl chc = new ChatRoomControl(curretChatRoom);

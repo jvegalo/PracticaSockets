@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import serverapp.ChatRoom;
+import serverapp.User;
 
 /**
  * Connection
@@ -22,8 +23,8 @@ import serverapp.ChatRoom;
 public class ChatServer {
 
     private static int PORT = 5000;
-    public static List userList = new ArrayList();
-    public static List chatRoomsList  = new ArrayList();
+    public static ArrayList<User> userList = new ArrayList<User>();
+    public static ArrayList<ChatRoom> chatRoomsList = new ArrayList<ChatRoom>();
     
     public ChatServer() throws IOException{        
         ServerSocket socketServidor = new ServerSocket(PORT);
