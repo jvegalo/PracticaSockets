@@ -64,7 +64,8 @@ public class ClientThread implements Runnable{
         //Hacer efectivo el protocolo.
         System.out.println("*********Hilo nuevo*******");
         System.out.println("Soy tu nuevo cliente");
-        boolean isNew = false;
+        boolean isNewUser = false;
+        boolean isNewMessage = false;
         try{
             while(true){
                 String text = dataInput.readUTF();
@@ -100,7 +101,7 @@ public class ClientThread implements Runnable{
                                     ChatServer.chatRoomsList.get(j).addUser(newUser);
                                     response = "youAreAccepted";
                                     
-                                    isNew = true;
+                                    isNewUser = true;
                                     
                                     break;
                                 } 
@@ -127,11 +128,12 @@ public class ClientThread implements Runnable{
                     
                 } else if (command.equals("getUsersFromChatRoom")){
                     sendUsers(splitText);
+                } else if(command.equals("addUserMessageToChatRoom")){
+                    addMessageToChatRoom(splitText);
                 }
 
                 sendMessage(response);
-                if (isNew){
-                    
+                if (isNewUser){                    
                     sendUsers(splitText);
                 }
             }
@@ -164,6 +166,24 @@ public class ClientThread implements Runnable{
             
         }
         
+    }
+
+    private void addMessageToChatRoom(String[] splitText) throws IOException {
+        String chatRoomName = splitText[1];
+        String message = splitText[2];
+        String lastMessage ="No hay mensaje";
+        for (int i = 0; i < ChatServer.chatRoomsList.size(); i++){
+            if (chatRoomName.equals(ChatServer.chatRoomsList.get(i).getName())){
+                ChatServer.chatRoomsList.get(i).addMessage(message);
+                lastMessage = message;
+                break;
+            }
+        }
+        for (int p = 0; p < ChatServer.hilos.size(); p++){
+            ClientThread nuevoCliente=ChatServer.hilos.get(p);
+            nuevoCliente.dataOutput.writeUTF(lastMessage);
+            
+        }
     }
 
 }

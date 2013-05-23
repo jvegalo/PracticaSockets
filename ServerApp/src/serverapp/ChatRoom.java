@@ -14,7 +14,7 @@ import java.util.List;
 public class ChatRoom {
     private String name;
     private ArrayList<User> users = new ArrayList<User>();
-    private ArrayList<User> messages = new ArrayList<User>();
+    private ArrayList<String> messages = new ArrayList<String>();
 
     public ChatRoom(String name) {
         this.name = name;
@@ -39,6 +39,10 @@ public class ChatRoom {
     
     public void addUser(User u){
         this.users.add(u);
+    }
+    
+    public void addMessage(String message){
+        this.messages.add(message);
     }
     
 }
