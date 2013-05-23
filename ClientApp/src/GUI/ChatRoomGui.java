@@ -5,12 +5,14 @@
 package GUI;
 
 import clientapp.ChatRoomControl;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
  * @author jose
  */
-public class ChatRoomGui extends javax.swing.JFrame {
+public class ChatRoomGui extends javax.swing.JFrame implements Observer {
     private static ChatRoomControl chc;
     /**
      * Creates new form Conversation
@@ -18,6 +20,7 @@ public class ChatRoomGui extends javax.swing.JFrame {
     public ChatRoomGui(ChatRoomControl chc) {
         initComponents();
         this.chc = chc;
+        chc.listenServer();
     }
 
     /**
@@ -200,4 +203,9 @@ public class ChatRoomGui extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object o1) {
+        jList1.setListData(chc.getUsersFromMyChatroom());
+    }
 }

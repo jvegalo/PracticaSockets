@@ -25,6 +25,7 @@ public class MainWindow extends javax.swing.JFrame {
     private Connection co;
     private Vector chatRoomsList = new Vector();
     private static User currentUser;
+    private boolean chatRoomsUnlocked = true;
     private ListSelectionListener lSL = new ListSelectionListener()
     {
         @Override
@@ -37,11 +38,14 @@ public class MainWindow extends javax.swing.JFrame {
                 try {
                     String[] answer = co.requestChatRoom(currentUser.getUser_name(), ChatRoomDesired).split("&");
                     if (answer[0].equals("userAddedToChatRoom")){
-                        // if the server accepts, we open the new chatRoom
+                        // if the server accepts, we open the new chat room
                         ChatRoom curretChatRoom = new ChatRoom(ChatRoomDesired);
                         ChatRoomControl chc = new ChatRoomControl(curretChatRoom);
                         ChatRoomGui chg = new ChatRoomGui(chc);
+                        curretChatRoom.addObserver(chg);
                         chg.setVisible(true);
+                        // the user cannot visit other chatRooms while he is on this one
+                        chatRoomsUnlocked = false;
                     }
                     
                     
