@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import serverapp.ChatRoom;
 import serverapp.User;
 
@@ -62,7 +64,7 @@ public class ClientThread implements Runnable{
         //Hacer efectivo el protocolo.
         System.out.println("*********Hilo nuevo*******");
         System.out.println("Soy tu nuevo cliente");
-        
+        boolean isNew = false;
         try{
             while(true){
                 String text = dataInput.readUTF();
@@ -96,7 +98,10 @@ public class ClientThread implements Runnable{
                             for (int j = 0; j < ChatServer.chatRoomsList.size(); j++){
                                 if (chatRoomName.equals(ChatServer.chatRoomsList.get(j).getName())){
                                     ChatServer.chatRoomsList.get(j).addUser(newUser);
-                                    response = "userAddedToChatRoom&" + newUser.getUsername();
+                                    response = "youAreAccepted";
+                                    
+                                    isNew = true;
+                                    
                                     break;
                                 } 
                             }
@@ -121,26 +126,42 @@ public class ClientThread implements Runnable{
                     }
                     
                 } else if (command.equals("getUsersFromChatRoom")){
-                    String chatRoomName = splitText[1];
-                    ChatRoom chatRoom;
-                    for (int i = 0; i < ChatServer.chatRoomsList.size(); i++){
-                        if (chatRoomName.equals(ChatServer.chatRoomsList.get(i).getName())){
-                            chatRoom = ChatServer.chatRoomsList.get(i);
-                            response = "usersFromChatRoom";
-                            for (int j = 0; j < chatRoom.getUsers().size(); j++){
-                                response += "&" + chatRoom.getUsers().get(j).getUsername();
-                            }
-                            break;
-                        }
-                    }
+                    sendUsers(splitText);
                 }
 
                 sendMessage(response);
+                if (isNew){
+                    
+                    sendUsers(splitText);
+                }
             }
             
             
         } catch (Exception e) {
              e.getMessage();
+        }
+        
+    }
+    
+    
+    public void sendUsers(String[] splitText) throws IOException{
+        String chatRoomName = splitText[1];
+        String answer = "";
+        ChatRoom chatRoom;
+        for (int i = 0; i < ChatServer.chatRoomsList.size(); i++){
+            if (chatRoomName.equals(ChatServer.chatRoomsList.get(i).getName())){
+                chatRoom = ChatServer.chatRoomsList.get(i);
+                answer = "usersFromChatRoom";
+                for (int j = 0; j < chatRoom.getUsers().size(); j++){
+                    answer += "&" + chatRoom.getUsers().get(j).getUsername();
+                }
+                break;
+            }
+        }
+        for (int p = 0; p < ChatServer.hilos.size(); p++){
+            ClientThread nuevoCliente=ChatServer.hilos.get(p);
+            nuevoCliente.dataOutput.writeUTF(answer);
+            
         }
         
     }

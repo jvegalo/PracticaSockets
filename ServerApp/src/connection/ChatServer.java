@@ -25,6 +25,7 @@ public class ChatServer {
     private static int PORT = 5000;
     public static ArrayList<User> userList = new ArrayList<User>();
     public static ArrayList<ChatRoom> chatRoomsList = new ArrayList<ChatRoom>();
+    public static ArrayList<ClientThread> hilos = new ArrayList<ClientThread>();
     
     public ChatServer() throws IOException{        
         ServerSocket socketServidor = new ServerSocket(PORT);
@@ -37,6 +38,8 @@ public class ChatServer {
             Socket client = socketServidor.accept();
             Runnable nuevoCliente = new ClientThread(client);
             Thread thread = new Thread(nuevoCliente);
+            ClientThread nuevoClientesito = new ClientThread(client);
+            hilos.add(nuevoClientesito);
             thread.start();
         }
     }

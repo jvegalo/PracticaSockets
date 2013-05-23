@@ -34,6 +34,8 @@ public class ChatRoom extends Observable {
 
     public void setUsers(Vector users) {
         this.users = users;
+        setChanged();
+        notifyObservers();
     }
 
     public Vector getMessages() {

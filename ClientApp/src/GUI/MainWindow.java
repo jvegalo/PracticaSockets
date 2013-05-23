@@ -37,7 +37,8 @@ public class MainWindow extends javax.swing.JFrame {
                 System.out.println(jList1.getSelectedValue().toString());
                 try {
                     String[] answer = co.requestChatRoom(currentUser.getUser_name(), ChatRoomDesired).split("&");
-                    if (answer[0].equals("userAddedToChatRoom")){
+                   
+                    if (answer[0].equals("youAreAccepted")){
                         // if the server accepts, we open the new chat room
                         ChatRoom curretChatRoom = new ChatRoom(ChatRoomDesired);
                         ChatRoomControl chc = new ChatRoomControl(curretChatRoom);
@@ -52,7 +53,7 @@ public class MainWindow extends javax.swing.JFrame {
                     } catch (IOException ex) {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                return;
+                //return;
             }
             else
             {

@@ -4,9 +4,13 @@
  */
 package GUI;
 
+import clientapp.ChatRoom;
 import clientapp.ChatRoomControl;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,10 +21,10 @@ public class ChatRoomGui extends javax.swing.JFrame implements Observer {
     /**
      * Creates new form Conversation
      */
-    public ChatRoomGui(ChatRoomControl chc) {
+    public ChatRoomGui(ChatRoomControl chc) throws IOException {
         initComponents();
         this.chc = chc;
-        chc.listenServer();
+        chc.getUsersFromServer();
     }
 
     /**
@@ -185,7 +189,11 @@ public class ChatRoomGui extends javax.swing.JFrame implements Observer {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ChatRoomGui(chc).setVisible(true);
+                try {
+                    new ChatRoomGui(chc).setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(ChatRoomGui.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -206,6 +214,6 @@ public class ChatRoomGui extends javax.swing.JFrame implements Observer {
 
     @Override
     public void update(Observable o, Object o1) {
-        jList1.setListData(chc.getUsersFromMyChatroom());
+       jList1.setListData(chc.getUsersFromMyChatroom()); 
     }
 }
