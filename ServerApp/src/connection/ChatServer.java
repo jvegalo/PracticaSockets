@@ -29,10 +29,10 @@ public class ChatServer {
     
     public ChatServer() throws IOException{        
         ServerSocket socketServidor = new ServerSocket(PORT);
-        ChatRoom chatRoom = new ChatRoom("Sala 1");
-        ChatRoom chatRoom2 = new ChatRoom("Sala 2");
-        chatRoomsList.add(chatRoom);
-        chatRoomsList.add(chatRoom2);
+//        ChatRoom chatRoom = new ChatRoom("Sala 1");
+//        ChatRoom chatRoom2 = new ChatRoom("Sala 2");
+//        chatRoomsList.add(chatRoom);
+//        chatRoomsList.add(chatRoom2);
         while (true)
         {
             Socket client = socketServidor.accept();

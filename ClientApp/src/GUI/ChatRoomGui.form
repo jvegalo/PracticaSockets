@@ -118,12 +118,13 @@
                               <Component id="chatRoomName" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane3" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" pref="258" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jScrollPane2" min="-2" pref="106" max="-2" attributes="0"/>
+                          <Component id="jScrollPane2" pref="106" max="32767" attributes="0"/>
+                          <Component id="jButton2" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -142,10 +143,11 @@
                               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                               <Component id="jScrollPane2" min="-2" pref="193" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jScrollPane3" pref="238" max="32767" attributes="0"/>
+                              <Component id="jScrollPane3" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -207,6 +209,14 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Component class="javax.swing.JButton" name="jButton2">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Exit"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>

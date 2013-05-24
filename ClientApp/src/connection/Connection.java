@@ -34,6 +34,7 @@ public class Connection {
         DataOutputStream os;
         os = new DataOutputStream( serverSocket.getOutputStream() );
         os.writeUTF(a);
+        os.flush();
     }
     
     public String getMessage() throws IOException{

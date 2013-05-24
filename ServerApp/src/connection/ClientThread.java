@@ -71,15 +71,12 @@ public class ClientThread implements Runnable{
     @Override
     public void run() {
         //Hacer efectivo el protocolo.
-        System.out.println("*********Hilo nuevo*******");
-        System.out.println("Soy tu nuevo cliente");
-        boolean isNewUser = false;
-        boolean isNewMessage = false;
         try{
             while(true){
                 String text = dataInput.readUTF();
                 String[] splitText = text.split("&");
                 String command = splitText[0];
+                System.out.println(command);
                 if (command.equals("confirmUser")){
                     String username = splitText[1];
                     String password = splitText[2];
@@ -98,8 +95,8 @@ public class ClientThread implements Runnable{
                     String chatRoomName = splitText[1];
                     ChatRoom chatRoom = new ChatRoom(chatRoomName);
                     ChatServer.chatRoomsList.add(chatRoom);
-                    response = "ChatRoom added&" + chatRoom.getName();
-                    sendMessage(response);
+                    response = "chatRoomAdded&" + chatRoom.getName();
+                    //sendMessage(response);
                 } else if (command.equals("pushMessage")){
 
                 } else if (command.equals("addUserToChatRoom")){
@@ -111,10 +108,7 @@ public class ClientThread implements Runnable{
                             for (int j = 0; j < ChatServer.chatRoomsList.size(); j++){
                                 if (chatRoomName.equals(ChatServer.chatRoomsList.get(j).getName())){
                                     ChatServer.chatRoomsList.get(j).addUser(newUser);
-                                    response = "youAreAccepted";
-                                    
-                                    isNewUser = true;
-                                    
+                                    response = "youAreAccepted";                                      
                                     break;
                                 } 
                             }
@@ -147,12 +141,9 @@ public class ClientThread implements Runnable{
                     addMessageToChatRoom(splitText);
                     sendMessageToAll(response);
                 }
-                               
+                 
+                System.out.println(response);
                 
-                if (isNewUser){                    
-                    sendUsers(splitText);
-                    isNewUser = false;
-                }
             }
             
             

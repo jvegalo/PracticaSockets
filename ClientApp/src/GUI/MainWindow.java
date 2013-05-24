@@ -15,6 +15,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -32,44 +33,30 @@ public class MainWindow extends javax.swing.JFrame {
         @Override
         public void valueChanged(ListSelectionEvent evt)
         {
-            if(evt.getValueIsAdjusting())
-            {
+             if(evt.getValueIsAdjusting()){
                 String ChatRoomDesired = jList1.getSelectedValue().toString();
                 System.out.println(jList1.getSelectedValue().toString());
                 try {
                     String[] answer = co.requestChatRoom(currentUser.getUser_name(), ChatRoomDesired).split("&");
-                   
-                    if (answer[0].equals("youAreAccepted")){
-                        // if the server accepts, we open the new chat room
-                        ChatRoom curretChatRoom = new ChatRoom(ChatRoomDesired);
-                        ChatRoomControl chc = new ChatRoomControl(curretChatRoom);
-                        ChatRoomGui chg = new ChatRoomGui(chc,currentUser);
-                        curretChatRoom.addObserver(chg);
-                        chg.setVisible(true);
-                        // the user cannot visit other chatRooms while he is on this one
-                        chatRoomsUnlocked = false;
-                    }else{
-                        try {
-                            MainWindow alerts = new MainWindow(currentUser);
-                            alerts.setVisible(false);
-                            JOptionPane.showMessageDialog(alerts,"Sorry, we have problems in our server");
-                        }catch (UnknownHostException ex) {
-                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex) {
-                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                         }
-                    }
+                    ChatRoom curretChatRoom = new ChatRoom(ChatRoomDesired);
+                    ChatRoomControl chc = new ChatRoomControl(curretChatRoom);
+                    ChatRoomGui chg = new ChatRoomGui(chc,currentUser);
+                    curretChatRoom.addObserver(chg);
+                    chg.setVisible(true);
+                    return;
+                 
                     
                     
                     } catch (IOException ex) {
                     Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                //return;
-            }
+                
+           }
             else{
                
                 
             }
+           
         }
     }; 
 
@@ -107,6 +94,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
+        jButton2 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
 
@@ -121,15 +109,24 @@ public class MainWindow extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
+        jButton2.setText("Update");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -139,10 +136,17 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton2)
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         jButton1.setText("Create Chatroom");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -178,6 +182,30 @@ public class MainWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+      CreateChatRoom cr = new CreateChatRoom();
+      cr.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        try {
+            String chatRooms = "";
+            chatRooms = co.getChatroomList();
+            String[] chatRoomsArray = chatRooms.split("&");
+            int arraySize = chatRoomsArray.length;
+            Vector newChatRooms = new Vector();
+            for (int i =1;i<arraySize;i++){
+                newChatRooms.add(chatRoomsArray[i]);
+            }
+            this.chatRoomsList=newChatRooms;
+            jList1.setListData(chatRoomsList);
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -221,6 +249,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
