@@ -59,6 +59,15 @@ public class ClientThread implements Runnable{
         dataOutput.writeUTF(message);
         dataOutput.flush();
     }
+    
+    public void sendMessageToAll(String message) throws IOException{
+        for (int p = 0; p < ChatServer.hilos.size(); p++){
+            ClientThread nuevoCliente=ChatServer.hilos.get(p);
+            nuevoCliente.dataOutput.writeUTF(message);
+            
+        }
+    }
+    
     @Override
     public void run() {
         //Hacer efectivo el protocolo.
@@ -77,17 +86,20 @@ public class ClientThread implements Runnable{
                     User user = new User(username, password);
                     ChatServer.userList.add(user);
                     response = "userAccepted";
+                    sendMessage(response);
 
                 } else if (command.equals("getChatRoomsList")){
                     response = "chatRoomsList";
                     for (int i = 0; i < ChatServer.chatRoomsList.size(); i++){                        
                         response += "&"+ ChatServer.chatRoomsList.get(i).getName();
                     }
+                    sendMessage(response);
                 } else if (command.equals("addChatRoom")){
                     String chatRoomName = splitText[1];
                     ChatRoom chatRoom = new ChatRoom(chatRoomName);
                     ChatServer.chatRoomsList.add(chatRoom);
                     response = "ChatRoom added&" + chatRoom.getName();
+                    sendMessage(response);
                 } else if (command.equals("pushMessage")){
 
                 } else if (command.equals("addUserToChatRoom")){
@@ -109,6 +121,7 @@ public class ClientThread implements Runnable{
                             break;
                         } 
                     }
+                    sendMessage(response);
                 } else if (command.equals("removeUserFromChatRoom")){
                     String userName = splitText[1];
                     String chatRoomName = splitText[2];
@@ -125,16 +138,20 @@ public class ClientThread implements Runnable{
                             break;
                         } 
                     }
-                    
+                    sendMessage(response);
                 } else if (command.equals("getUsersFromChatRoom")){
                     sendUsers(splitText);
+                    sendMessageToAll(response);
                 } else if(command.equals("addUserMessageToChatRoom")){
+                    
                     addMessageToChatRoom(splitText);
+                    sendMessageToAll(response);
                 }
-
-                sendMessage(response);
+                               
+                
                 if (isNewUser){                    
                     sendUsers(splitText);
+                    isNewUser = false;
                 }
             }
             
@@ -160,17 +177,19 @@ public class ClientThread implements Runnable{
                 break;
             }
         }
-        for (int p = 0; p < ChatServer.hilos.size(); p++){
-            ClientThread nuevoCliente=ChatServer.hilos.get(p);
-            nuevoCliente.dataOutput.writeUTF(answer);
-            
-        }
+        response = answer;
+//        for (int p = 0; p < ChatServer.hilos.size(); p++){
+//            ClientThread nuevoCliente=ChatServer.hilos.get(p);
+//            nuevoCliente.dataOutput.writeUTF(answer);
+//            
+//        }
         
     }
 
     private void addMessageToChatRoom(String[] splitText) throws IOException {
         String chatRoomName = splitText[1];
-        String message = splitText[2];
+        String userName = splitText[2];
+        String message = splitText[3];
         String lastMessage ="No hay mensaje";
         for (int i = 0; i < ChatServer.chatRoomsList.size(); i++){
             if (chatRoomName.equals(ChatServer.chatRoomsList.get(i).getName())){
@@ -179,11 +198,13 @@ public class ClientThread implements Runnable{
                 break;
             }
         }
-        for (int p = 0; p < ChatServer.hilos.size(); p++){
-            ClientThread nuevoCliente=ChatServer.hilos.get(p);
-            nuevoCliente.dataOutput.writeUTF(lastMessage);
-            
-        }
+        response = "lastMessage&"+userName+"&"+lastMessage;
+//        for (int p = 0; p < ChatServer.hilos.size(); p++){
+//            ClientThread nuevoCliente=ChatServer.hilos.get(p);
+//            response = "lastMessage&"+userName+"&"+lastMessage;
+//            nuevoCliente.dataOutput.writeUTF(response);
+//            System.out.println(lastMessage);
+//        }
     }
 
 }

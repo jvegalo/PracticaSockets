@@ -14,10 +14,11 @@ import java.util.Vector;
 public class ChatRoom extends Observable {
     private String name;
     private Vector users;
-    private Vector messages;
+    private Vector messages = new Vector();
     
     public ChatRoom(String name){
         this.name = name;
+        
     }
 
     public String getName() {
@@ -46,7 +47,11 @@ public class ChatRoom extends Observable {
         this.messages = messages;
     }
     
-    
+    public void addLastMessage(String message){
+        this.messages.add(message);
+        setChanged();
+        notifyObservers();
+    }
     
     
 }

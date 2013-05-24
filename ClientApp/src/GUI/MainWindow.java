@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -42,11 +43,21 @@ public class MainWindow extends javax.swing.JFrame {
                         // if the server accepts, we open the new chat room
                         ChatRoom curretChatRoom = new ChatRoom(ChatRoomDesired);
                         ChatRoomControl chc = new ChatRoomControl(curretChatRoom);
-                        ChatRoomGui chg = new ChatRoomGui(chc);
+                        ChatRoomGui chg = new ChatRoomGui(chc,currentUser);
                         curretChatRoom.addObserver(chg);
                         chg.setVisible(true);
                         // the user cannot visit other chatRooms while he is on this one
                         chatRoomsUnlocked = false;
+                    }else{
+                        try {
+                            MainWindow alerts = new MainWindow(currentUser);
+                            alerts.setVisible(false);
+                            JOptionPane.showMessageDialog(alerts,"Sorry, we have problems in our server");
+                        }catch (UnknownHostException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                         }
                     }
                     
                     
@@ -55,9 +66,9 @@ public class MainWindow extends javax.swing.JFrame {
                 }
                 //return;
             }
-            else
-            {
-//             
+            else{
+               
+                
             }
         }
     }; 

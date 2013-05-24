@@ -32,10 +32,22 @@ public class ChatRoomControl implements Runnable{
         return UsersFromMyChatRoom;
     }
     
+    public Vector getMessagesFromMyChatroom(){
+        Vector messagesFromMyChatRoom = new Vector();
+        messagesFromMyChatRoom = ch.getMessages();
+        return messagesFromMyChatRoom;
+    }
+    
     public void getUsersFromServer() throws IOException{
         co.sendMessage("getUsersFromChatRoom&" + ch.getName());
         
     }
+    
+    public void sendUserMessageToServer(String msg, String userName) throws IOException{
+        co.sendMessage("addUserMessageToChatRoom"+"&"+ch.getName()+"&"+userName+"&"+msg);
+    }
+    
+    
 
     @Override
     public void run() {
@@ -44,13 +56,19 @@ public class ChatRoomControl implements Runnable{
                 String text = co.getMessage();
                 String[] splitText = text.split("&");
                 String command = splitText[0];
+                // if the users of the chat room changed
                 if (command.equals("usersFromChatRoom")){
                     Vector users = new Vector();
                     for (int i = 1;i<splitText.length;i++){
                         users.add(splitText[i]);
-                        
                     }
                     ch.setUsers(users);
+                }
+                else if(command.equals("lastMessage")){
+                    String userName = splitText[1];
+                    String message = splitText[2];
+                    String whoAndWhat = userName+" says: "+message;
+                    ch.addLastMessage(whoAndWhat);
                     
                 }
             }

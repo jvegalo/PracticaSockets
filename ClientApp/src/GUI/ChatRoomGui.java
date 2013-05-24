@@ -6,11 +6,14 @@ package GUI;
 
 import clientapp.ChatRoom;
 import clientapp.ChatRoomControl;
+import clientapp.User;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,13 +21,16 @@ import java.util.logging.Logger;
  */
 public class ChatRoomGui extends javax.swing.JFrame implements Observer {
     private static ChatRoomControl chc;
+    private static User usr;
     /**
      * Creates new form Conversation
      */
-    public ChatRoomGui(ChatRoomControl chc) throws IOException {
+    public ChatRoomGui(ChatRoomControl chc, User usr) throws IOException {
         initComponents();
         this.chc = chc;
+        this.usr = usr;
         chc.getUsersFromServer();
+        
     }
 
     /**
@@ -56,6 +62,11 @@ public class ChatRoomGui extends javax.swing.JFrame implements Observer {
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton1.setText("SAY");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -159,6 +170,16 @@ public class ChatRoomGui extends javax.swing.JFrame implements Observer {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String message = jTextArea1.getText();
+        try {
+            chc.sendUserMessageToServer(message, usr.getUser_name());
+        } catch (IOException ex) {
+            Logger.getLogger(ChatRoomGui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -190,7 +211,7 @@ public class ChatRoomGui extends javax.swing.JFrame implements Observer {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new ChatRoomGui(chc).setVisible(true);
+                    new ChatRoomGui(chc, usr).setVisible(true);
                 } catch (IOException ex) {
                     Logger.getLogger(ChatRoomGui.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -215,5 +236,8 @@ public class ChatRoomGui extends javax.swing.JFrame implements Observer {
     @Override
     public void update(Observable o, Object o1) {
        jList1.setListData(chc.getUsersFromMyChatroom()); 
+       Vector vc = new Vector();
+       vc = chc.getMessagesFromMyChatroom();
+       jList2.setListData(chc.getMessagesFromMyChatroom());
     }
 }
