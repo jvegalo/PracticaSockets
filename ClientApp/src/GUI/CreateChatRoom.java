@@ -85,6 +85,7 @@ public class CreateChatRoom extends javax.swing.JFrame {
         try {
             co = Connection.getInstanceConnection();
             co.sendMessage("addChatRoom"+"&"+jTextField1.getText());
+            // con ese metodo sendMessage mando que quiero agregar un chatroom y el nombre del chatroom, entonces ahora vamos a send messsage y mostrame porfa como lo recive el srv
             this.setVisible(false);
             jTextField1.setText("");
         } catch (UnknownHostException ex) {

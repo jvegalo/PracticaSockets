@@ -10,14 +10,11 @@ import clientapp.User;
 import connection.Connection;
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.DefaultListModel;
+
 
 /**
  *
@@ -25,59 +22,65 @@ import javax.swing.event.ListSelectionListener;
  */
 public class MainWindow extends javax.swing.JFrame {
     private Connection co;
-    private Vector chatRoomsList = new Vector();
+    //private Vector chatRoomsList = new Vector();
     private static User currentUser;
     private boolean chatRoomsUnlocked = true;
-    private ListSelectionListener lSL = new ListSelectionListener()
-    {
-        @Override
-        public void valueChanged(ListSelectionEvent evt)
-        {
-             if(evt.getValueIsAdjusting()){
-                String ChatRoomDesired = jList1.getSelectedValue().toString();
-                System.out.println(jList1.getSelectedValue().toString());
-                try {
-                    String[] answer = co.requestChatRoom(currentUser.getUser_name(), ChatRoomDesired).split("&");
-                    ChatRoom curretChatRoom = new ChatRoom(ChatRoomDesired);
-                    ChatRoomControl chc = new ChatRoomControl(curretChatRoom);
-                    ChatRoomGui chg = new ChatRoomGui(chc,currentUser);
-                    curretChatRoom.addObserver(chg);
-                    chg.setVisible(true);
-                    return;
-                 
-                    
-                    
-                    } catch (IOException ex) {
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-           }
-            else{
-               
-                
-            }
-           
-        }
-    }; 
+    
+//    private ListSelectionListener lSL = new ListSelectionListener()
+//    {
+//        @Override
+//        
+//        
+//        public void valueChanged(ListSelectionEvent evt)
+//        {
+//             if(evt.getValueIsAdjusting()){
+//                String ChatRoomDesired = jList1.getSelectedValue().toString();
+//                System.out.println(jList1.getSelectedValue().toString());
+//                try {
+//                    String[] answer = co.requestChatRoom(currentUser.getUser_name(), ChatRoomDesired).split("&");
+//                    ChatRoom curretChatRoom = new ChatRoom(ChatRoomDesired);
+//                    ChatRoomControl chc = new ChatRoomControl(curretChatRoom);
+//                    ChatRoomGui chg = new ChatRoomGui(chc,currentUser);
+//                    curretChatRoom.addObserver(chg);
+//                    chg.setVisible(true);
+//                    return;
+//                 
+//                    
+//                    
+//                    } catch (IOException ex) {
+//                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                
+//           }
+//            else{
+//               
+//                
+//            }
+//           
+//        }
+//    }; 
 
    
     public MainWindow(User currentUser) throws UnknownHostException, IOException {
         initComponents();
         this.currentUser = currentUser;
-        co = Connection.getInstanceConnection();
+        this.co = Connection.getInstanceConnection();
         //get available chat rooms at the moment
         String chatRooms = co.getChatroomList();
         if (chatRooms!=null){
             String[] chatRoomsArray = chatRooms.split("&");
             int arraySize = chatRoomsArray.length;
+            DefaultListModel modelo = new DefaultListModel();
             for (int i =1;i<arraySize;i++){
-                this.chatRoomsList.add(chatRoomsArray[i]);
+                modelo.addElement(chatRoomsArray[i]);
             }
+            jList1.setModel(modelo);
         }else{
-            this.chatRoomsList.add("There are no chatrooms yet");
+            
+            
         }
-        jList1.setListData(chatRoomsList);
-        jList1.addListSelectionListener(lSL);
+        //jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        //jList1.addListSelectionListener(lSL);
         
     }
 
@@ -95,6 +98,7 @@ public class MainWindow extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
 
@@ -116,18 +120,28 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Join");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel1)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(148, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,7 +151,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
@@ -184,8 +200,11 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      CreateChatRoom cr = new CreateChatRoom();
-      cr.setVisible(true);
+        //DefaultListModel model = (DefaultListModel) jList1.getModel();
+        //model.removeElement(jList1.getSelectedValue());
+        //jList1.setModel(model);
+        CreateChatRoom cr = new CreateChatRoom();
+        cr.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -195,17 +214,34 @@ public class MainWindow extends javax.swing.JFrame {
             chatRooms = co.getChatroomList();
             String[] chatRoomsArray = chatRooms.split("&");
             int arraySize = chatRoomsArray.length;
-            Vector newChatRooms = new Vector();
+            DefaultListModel modelo = new DefaultListModel();
             for (int i =1;i<arraySize;i++){
-                newChatRooms.add(chatRoomsArray[i]);
+                //newChatRooms.add(chatRoomsArray[i]);
+                modelo.addElement(chatRoomsArray[i]);
             }
-            this.chatRoomsList=newChatRooms;
-            jList1.setListData(chatRoomsList);
+           
+            jList1.setModel(modelo);
+            
+           
         } catch (IOException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
        
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            String ChatRoomDesired = jList1.getSelectedValue().toString();
+            String[] answer = co.requestChatRoom(currentUser.getUser_name(), ChatRoomDesired).split("&");
+            ChatRoom curretChatRoom = new ChatRoom(ChatRoomDesired);
+            ChatRoomControl chc = new ChatRoomControl(curretChatRoom);
+            ChatRoomGui chg = new ChatRoomGui(chc,currentUser);
+            curretChatRoom.addObserver(chg);
+            chg.setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -250,6 +286,7 @@ public class MainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;

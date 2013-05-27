@@ -19,7 +19,7 @@ public class Connection {
     private static Connection uniqueConnection = null;
     
     private Connection() throws UnknownHostException, IOException{
-        serverSocket = new Socket("localhost",5000);
+        serverSocket = new Socket("10.0.34.72",5000);
         
     }
     //Singleton
@@ -49,7 +49,9 @@ public class Connection {
     public String getChatroomList () throws IOException{
         this.sendMessage("getChatRoomsList&");
         String chatRooms = this.getMessage();
+        System.out.println(chatRooms);
         return chatRooms;
+        
     }
     
     public String requestChatRoom (String User_name, String ChatRoomDesired) throws IOException{

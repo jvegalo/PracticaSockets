@@ -33,8 +33,7 @@ public class ClientThread implements Runnable{
             dataInput = new DataInputStream(socket.getInputStream());
             dataOutput = new DataOutputStream(socket.getOutputStream());
             
-            /* Add this chat to the default list model*/ 
-            //chat.addListDataListener(this);
+            
             
         } catch (Exception e) {
             e.getMessage();
@@ -92,6 +91,7 @@ public class ClientThread implements Runnable{
                     }
                     sendMessage(response);
                 } else if (command.equals("addChatRoom")){
+                    //piya aca es donde el server recibe ese mensaje a ver pillo y volveme a mostrar porfa el q le devuelve los chats al cliebte
                     String chatRoomName = splitText[1];
                     ChatRoom chatRoom = new ChatRoom(chatRoomName);
                     ChatServer.chatRoomsList.add(chatRoom);
