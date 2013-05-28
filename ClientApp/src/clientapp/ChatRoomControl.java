@@ -84,7 +84,7 @@ public class ChatRoomControl implements Runnable{
                 else if(command.equals("userRemovedFromChatRoom")){
                     String chatRoom = splitText[1];
                     String userName = splitText[2];
-                    if (userName.equals(ch.getName())){
+                    if (chatRoom.equals(ch.getName())){
                         ch.removeUser(userName);
                     }
                 }
