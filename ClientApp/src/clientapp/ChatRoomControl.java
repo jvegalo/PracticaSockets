@@ -81,6 +81,13 @@ public class ChatRoomControl implements Runnable{
                     ch.addLastMessage(whoAndWhat);
                     
                 }
+                else if(command.equals("userRemovedFromChatRoom")){
+                    String chatRoom = splitText[1];
+                    String userName = splitText[2];
+                    if (userName.equals(ch.getName())){
+                        
+                    }
+                }
             }
         }catch (Exception e) {
             e.getMessage();

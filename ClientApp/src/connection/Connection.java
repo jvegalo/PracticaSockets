@@ -21,7 +21,7 @@ public class Connection {
     private DataOutputStream dataOutput;
     
     private Connection() throws UnknownHostException, IOException{
-        serverSocket = new Socket("localhost",5000);
+        serverSocket = new Socket("10.0.34.72",5000);
         dataInput = new DataInputStream(serverSocket.getInputStream());
         dataOutput = new DataOutputStream(serverSocket.getOutputStream());
         
