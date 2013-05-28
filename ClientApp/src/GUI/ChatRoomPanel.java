@@ -35,6 +35,7 @@ public class ChatRoomPanel extends javax.swing.JPanel implements Observer {
         this.mf = mf;
         this.co = co;
         chc.getUsersFromServer();
+        chatRoomName.setText(chc.getChatRoomName());
     }
 
     /**

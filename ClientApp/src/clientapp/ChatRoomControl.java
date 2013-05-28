@@ -53,6 +53,11 @@ public class ChatRoomControl implements Runnable{
     public void quitUserFromChatRoom(String userName) throws IOException{
         co.sendMessage("removeUserFromChatRoom"+"&"+userName+"&"+ch.getName());
     }
+    
+    public String getChatRoomName(){
+        String name = ch.getName();
+        return name;
+    }
 
     @Override
     public void run() {

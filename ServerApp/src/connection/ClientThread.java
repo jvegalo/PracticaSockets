@@ -97,8 +97,6 @@ public class ClientThread implements Runnable{
                     ChatServer.chatRoomsList.add(chatRoom);
                     response = "chatRoomAdded&" + chatRoom.getName();
                     //sendMessage(response);
-                } else if (command.equals("pushMessage")){
-
                 } else if (command.equals("addUserToChatRoom")){
                     String userName = splitText[1];
                     String chatRoomName = splitText[2];
@@ -124,7 +122,10 @@ public class ClientThread implements Runnable{
                             User userToRemove = ChatServer.userList.get(i);
                             for (int j = 0; j < ChatServer.chatRoomsList.size(); j++){
                                 if (chatRoomName.equals(ChatServer.chatRoomsList.get(j).getName())){
-                                    ChatServer.chatRoomsList.remove(userToRemove);
+                                    ChatServer.chatRoomsList.get(j).removeUser(userToRemove);
+                                    if (ChatServer.chatRoomsList.get(j).getUsers().isEmpty()){
+                                        ChatServer.chatRoomsList.remove(j);
+                                    }                                    
                                     response = "userRemovedFromChatRoom&" + userToRemove.getUsername();
                                     break;
                                 } 

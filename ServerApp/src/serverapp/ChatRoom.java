@@ -41,6 +41,10 @@ public class ChatRoom {
         this.users.add(u);
     }
     
+    public void removeUser(User u){
+        this.users.remove(u);
+    }
+    
     public void addMessage(String message){
         this.messages.add(message);
     }
