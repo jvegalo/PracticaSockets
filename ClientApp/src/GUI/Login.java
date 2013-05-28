@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -120,6 +121,7 @@ public class Login extends javax.swing.JFrame {
             for(int i=0;i<charArrayLength;i++){
                 password += a[i];
             }
+                        
             String userData = "confirmUser&"+txtUsername.getText()+"&"+password;
             //Verfify that user exists
             co.sendMessage(userData);
@@ -127,18 +129,22 @@ public class Login extends javax.swing.JFrame {
             if (confirmation.equals("userAccepted")){
                 //instance current logged user
                 User currentUser = new User (txtUsername.getText(),password);
-                MainFrame mf = new MainFrame(currentUser);
+                MainFrame mf;
+                mf = new MainFrame(currentUser, this);
                 this.setVisible(false);
                 mf.setVisible(true);
                 System.out.println(confirmation);
             } else {
+                JOptionPane.showMessageDialog(this, "This User is already logged");
                 System.out.println("Error");
             }
+           
         } catch (UnknownHostException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         
         
        

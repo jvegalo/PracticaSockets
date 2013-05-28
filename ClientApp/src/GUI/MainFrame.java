@@ -21,14 +21,17 @@ public class MainFrame extends javax.swing.JFrame {
     ChatRoomPanel chatRoom;
     Connection co;
     ChatRoomControl chc;
+    Login lf;
     /**
      * Creates new form MainFrame
      */
-    public MainFrame(User currentUser) throws UnknownHostException, IOException {
+    public MainFrame(User currentUser, Login lf) throws UnknownHostException, IOException {
         //initComponents();
         this.co = Connection.getInstanceConnection();
         this.currentUser = currentUser;
+        this.lf = lf;
         panelPrincipal = new PrincipalPanel(currentUser, this, co);
+        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         this.setContentPane(panelPrincipal);
         this.pack();
         //this.add(panelPrincipal);

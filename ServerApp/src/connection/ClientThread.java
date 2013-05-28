@@ -75,13 +75,24 @@ public class ClientThread implements Runnable{
                 String text = dataInput.readUTF();
                 String[] splitText = text.split("&");
                 String command = splitText[0];
-                System.out.println(command);
+                System.out.println(text);
                 if (command.equals("confirmUser")){
+                    boolean userExist = false;
                     String username = splitText[1];
                     String password = splitText[2];
                     User user = new User(username, password);
-                    ChatServer.userList.add(user);
-                    response = "userAccepted";
+                    for (int i = 0; i < ChatServer.userList.size(); i++){
+                        if (username.equals(ChatServer.userList.get(i).getUsername())){
+                            userExist = true;
+                        }                        
+                    }
+                    if (userExist){
+                        response = "userRefused";
+                    } else {
+                        ChatServer.userList.add(user);
+                        response = "userAccepted";
+                    }
+                    
                     sendMessage(response);
 
                 } else if (command.equals("getChatRoomsList")){
@@ -126,14 +137,14 @@ public class ClientThread implements Runnable{
                                     if (ChatServer.chatRoomsList.get(j).getUsers().isEmpty()){
                                         ChatServer.chatRoomsList.remove(j);
                                     }                                    
-                                    response = "userRemovedFromChatRoom&" + userToRemove.getUsername();
+                                    response = "userRemovedFromChatRoom&" + chatRoomName + "&" + userToRemove.getUsername();
                                     break;
                                 } 
                             }
                             break;
                         } 
                     }
-                    sendMessage(response);
+                    sendMessageToAll(response);
                 } else if (command.equals("getUsersFromChatRoom")){
                     sendUsers(splitText);
                     sendMessageToAll(response);
@@ -141,6 +152,21 @@ public class ClientThread implements Runnable{
                     
                     addMessageToChatRoom(splitText);
                     sendMessageToAll(response);
+                } else if (command.equals("getAllUsers")){
+                    response = "allUsers";
+                    for (int i = 0; i < ChatServer.userList.size(); i++){
+                        response += "&"+ ChatServer.userList.get(i).getUsername();
+                    }
+                } else if (command.equals("logoutUser")){
+                    String username = splitText[1];
+                    for (int i = 0; i < ChatServer.userList.size(); i++){
+                        if (username.equals(ChatServer.userList.get(i).getUsername())){
+                            ChatServer.userList.remove(i);
+                            response = "userRevomed";
+                            break;
+                        }                        
+                    }
+                    //sendMessage(response);
                 }
                  
                 System.out.println(response);

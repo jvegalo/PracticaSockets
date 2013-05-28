@@ -65,6 +65,7 @@ public class ChatRoomControl implements Runnable{
             while (seguir){
                 String text = co.getMessage();
                 String[] splitText = text.split("&");
+                System.out.println(text);
                 String command = splitText[0];
                 // if the users of the chat room changed
                 if (command.equals("usersFromChatRoom")){

@@ -35,16 +35,11 @@ public class Connection {
     }
     
     public void sendMessage(String a) throws IOException{
-        //DataOutputStream os;
-        //os = new DataOutputStream( serverSocket.getOutputStream() );
         dataOutput.writeUTF(a);
         dataOutput.flush();
     }
     
     public String getMessage() throws IOException{
-
-            //DataInputStream dataInput;
-            //dataInput = new DataInputStream(serverSocket.getInputStream());
             String message = dataInput.readUTF();
             return message;
         
