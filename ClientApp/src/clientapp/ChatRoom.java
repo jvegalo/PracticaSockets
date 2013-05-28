@@ -56,7 +56,7 @@ public class ChatRoom extends Observable {
     public void removeUser(String user){
         for (int i =0;i<users.size();i++){
             User u = (User) users.elementAt(i);
-            if (u.equals(user)){
+            if (u.getUser_name().equals(user)){
                 users.removeElementAt(i);
             }
         }
