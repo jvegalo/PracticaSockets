@@ -16,6 +16,7 @@ import java.util.Vector;
 public class ChatRoomControl implements Runnable{
     private ChatRoom ch;
     private Connection co;
+    boolean seguir = true;
     
     public ChatRoomControl(ChatRoom ch) throws UnknownHostException, IOException{
         this.ch = ch;
@@ -24,7 +25,9 @@ public class ChatRoomControl implements Runnable{
         co = Connection.getInstanceConnection();
     }
     
-    
+    public void stopCHC(){
+        seguir = false;
+    }
     
     public Vector getUsersFromMyChatroom(){
         Vector UsersFromMyChatRoom = new Vector();
@@ -54,7 +57,7 @@ public class ChatRoomControl implements Runnable{
     @Override
     public void run() {
         try{
-            while (true){
+            while (seguir){
                 String text = co.getMessage();
                 String[] splitText = text.split("&");
                 String command = splitText[0];

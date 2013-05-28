@@ -17,9 +17,13 @@ import java.net.UnknownHostException;
 public class Connection {
     private Socket serverSocket = null;
     private static Connection uniqueConnection = null;
+    private DataInputStream dataInput;
+    private DataOutputStream dataOutput;
     
     private Connection() throws UnknownHostException, IOException{
-        serverSocket = new Socket("10.0.34.72",5000);
+        serverSocket = new Socket("localhost",5000);
+        dataInput = new DataInputStream(serverSocket.getInputStream());
+        dataOutput = new DataOutputStream(serverSocket.getOutputStream());
         
     }
     //Singleton
@@ -31,16 +35,16 @@ public class Connection {
     }
     
     public void sendMessage(String a) throws IOException{
-        DataOutputStream os;
-        os = new DataOutputStream( serverSocket.getOutputStream() );
-        os.writeUTF(a);
-        os.flush();
+        //DataOutputStream os;
+        //os = new DataOutputStream( serverSocket.getOutputStream() );
+        dataOutput.writeUTF(a);
+        dataOutput.flush();
     }
     
     public String getMessage() throws IOException{
 
-            DataInputStream dataInput;
-            dataInput = new DataInputStream(serverSocket.getInputStream());
+            //DataInputStream dataInput;
+            //dataInput = new DataInputStream(serverSocket.getInputStream());
             String message = dataInput.readUTF();
             return message;
         

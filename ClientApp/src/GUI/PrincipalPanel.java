@@ -23,27 +23,29 @@ public class PrincipalPanel extends javax.swing.JPanel {
     //private Vector chatRoomsList = new Vector();
     private static User currentUser;
     private boolean chatRoomsUnlocked = true;
+    private MainFrame mf;
     /**
      * Creates new form PrincipalPanel
      */
-    public PrincipalPanel(User currentUser) throws UnknownHostException, IOException {
+    public PrincipalPanel(User currentUser, MainFrame mf, Connection co) throws UnknownHostException, IOException {
         initComponents();
         this.currentUser = currentUser;
-        this.co = Connection.getInstanceConnection();
+        this.co = co;
+        this.mf = mf;
         //get available chat rooms at the moment
-        String chatRooms = co.getChatroomList();
-        if (chatRooms!=null){
-            String[] chatRoomsArray = chatRooms.split("&");
-            int arraySize = chatRoomsArray.length;
-            DefaultListModel modelo = new DefaultListModel();
-            for (int i =1;i<arraySize;i++){
-                modelo.addElement(chatRoomsArray[i]);
-            }
-            jList1.setModel(modelo);
-        }else{
-            
-            
-        }
+       // String chatRooms = co.getChatroomList();
+//        if (chatRooms!=null){
+//            String[] chatRoomsArray = chatRooms.split("&");
+//            int arraySize = chatRoomsArray.length;
+           DefaultListModel modelo = new DefaultListModel();
+//            for (int i =1;i<arraySize;i++){
+//                modelo.addElement(chatRoomsArray[i]);
+//            }
+           jList1.setModel(modelo);
+//        }else{
+//            
+//            
+//        }
     }
 
     /**
@@ -132,17 +134,13 @@ public class PrincipalPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        try {
+        try {       
             String ChatRoomDesired = jList1.getSelectedValue().toString();
-            String[] answer = co.requestChatRoom(currentUser.getUser_name(), ChatRoomDesired).split("&");
-            ChatRoom curretChatRoom = new ChatRoom(ChatRoomDesired);
-            ChatRoomControl chc = new ChatRoomControl(curretChatRoom);
-            ChatRoomGui chg = new ChatRoomGui(chc,currentUser);
-            curretChatRoom.addObserver(chg);
-            chg.setVisible(true);
+            mf.joinChat(currentUser, ChatRoomDesired);
         } catch (IOException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrincipalPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -171,7 +169,7 @@ public class PrincipalPanel extends javax.swing.JPanel {
         //DefaultListModel model = (DefaultListModel) jList1.getModel();
         //model.removeElement(jList1.getSelectedValue());
         //jList1.setModel(model);
-        CreateChatRoom cr = new CreateChatRoom();
+        CreateChatRoom cr = new CreateChatRoom(co);
         cr.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

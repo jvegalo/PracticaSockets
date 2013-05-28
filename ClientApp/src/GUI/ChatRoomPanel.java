@@ -6,7 +6,9 @@ package GUI;
 
 import clientapp.ChatRoomControl;
 import clientapp.User;
+import connection.Connection;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
@@ -21,13 +23,17 @@ public class ChatRoomPanel extends javax.swing.JPanel implements Observer {
 
     private static ChatRoomControl chc;
     private static User usr;
+    private MainFrame mf;
+    private Connection co;
     /**
      * Creates new form ChatRoomPanel
      */
-    public ChatRoomPanel(ChatRoomControl chc, User usr) throws IOException {
+    public ChatRoomPanel(ChatRoomControl chc, User usr, MainFrame mf, Connection co) throws IOException {
         initComponents();
         this.chc = chc;
         this.usr = usr;
+        this.mf = mf;
+        this.co = co;
         chc.getUsersFromServer();
     }
 
@@ -135,21 +141,31 @@ public class ChatRoomPanel extends javax.swing.JPanel implements Observer {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
+        try {       
             String message = jTextArea1.getText();
             chc.sendUserMessageToServer(message, usr.getUser_name());
+            jTextArea1.setText("");
         } catch (IOException ex) {
-            Logger.getLogger(ChatRoomGui.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ChatRoomPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+       
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
+        try {      
             chc.quitUserFromChatRoom(usr.getUser_name());
+            try {
+                mf.exitChat();
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(ChatRoomPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ChatRoomPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (IOException ex) {
             Logger.getLogger(ChatRoomPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+      
             
        
     }//GEN-LAST:event_jButton2ActionPerformed
