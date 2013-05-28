@@ -25,7 +25,7 @@ public class ChatRoomControl implements Runnable{
         co = Connection.getInstanceConnection();
     }
     
-    public void stopCHC(){
+    public void stopCHC() throws InterruptedException{
         seguir = false;
     }
     
